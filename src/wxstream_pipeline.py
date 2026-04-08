@@ -11,6 +11,7 @@ Pipeline flow per run:
   Phase 4b - audio_trim.py          (-> trim_manifest.json + trimmed audio)
   Phase 5  - generate_report.py     (-> awos_report.html)
   Phase 6  - atlas_import.py        (-> MongoDB Atlas, if configured)
+  Phase 7  - s3_upload.py           (-> AWS S3, if WXSTREAM_S3_BUCKET set)
 
 Each run gets its own timestamped directory under runs/. A runs/latest
 symlink always points to the most recent run.
@@ -674,6 +675,26 @@ def run_pipeline(dry_run=False, workers=TRANSCRIBE_WORKERS, local_only=False):
             log.info("Skipping Atlas import - MONGO_DB_PASSWORD not set")
     elif not os.path.isfile(atlas_script):
         log.debug("atlas_import.py not found - skipping MongoDB import")
+
+    # --- Phase 7: Upload recordings to S3 ---
+    s3_script = os.path.join(SCRIPT_DIR, "s3_upload.py")
+    if os.path.isfile(s3_script) and not dry_run:
+        s3_bucket = os.getenv("WXSTREAM_S3_BUCKET", "")
+        if s3_bucket:
+            log.info("Uploading recordings to S3...")
+            r = subprocess.run(
+                [sys.executable, s3_script],
+                cwd=PROJECT_DIR,
+                env={**os.environ},
+            )
+            if r.returncode != 0:
+                log.error("s3_upload.py failed (rc=%d)", r.returncode)
+            else:
+                log.info("S3 upload complete")
+        else:
+            log.info("Skipping S3 upload - WXSTREAM_S3_BUCKET not set")
+    elif not os.path.isfile(s3_script):
+        log.debug("s3_upload.py not found - skipping S3 upload")
 
     log.info("=" * 60)
     log.info("Run directory: %s", run_dir)
