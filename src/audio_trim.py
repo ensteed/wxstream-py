@@ -37,8 +37,15 @@ import sys
 import numpy as np
 
 _SCRIPT_DIR      = os.path.dirname(os.path.abspath(__file__))
-_STRIPPED_DIR    = os.path.join(_SCRIPT_DIR, "stripped_recordings")
-_RECORDINGS_DIR  = os.path.join(_SCRIPT_DIR, "recordings")
+# Support scripts living in a subdirectory (e.g. src/) by searching
+# upward for the stations JSON and using that directory as the project root.
+_PROJECT_DIR     = _SCRIPT_DIR
+for _candidate in [_SCRIPT_DIR, os.path.dirname(_SCRIPT_DIR)]:
+    if os.path.isfile(os.path.join(_candidate, "missouri_awos_asos_stations.json")):
+        _PROJECT_DIR = _candidate
+        break
+_STRIPPED_DIR    = os.path.join(_PROJECT_DIR, "stripped_recordings")
+_RECORDINGS_DIR  = os.path.join(_PROJECT_DIR, "recordings")
 # Prefer stripped_recordings/ (silence removed) when it has MP3s,
 # otherwise fall back to recordings/ (raw downloads)
 INPUT_DIR        = (_STRIPPED_DIR
@@ -46,11 +53,11 @@ INPUT_DIR        = (_STRIPPED_DIR
                     and any(f.lower().endswith(".mp3")
                             for f in os.listdir(_STRIPPED_DIR))
                     else _RECORDINGS_DIR)
-OUTPUT_DIR       = os.path.join(_SCRIPT_DIR, "trimmed_recordings")
-JSON_FILE        = os.path.join(_SCRIPT_DIR, "missouri_awos_asos_stations.json")
-TRANSCRIPTS_FILE  = os.path.join(_SCRIPT_DIR, "transcripts.json")
-PARSED_FILE       = os.path.join(_SCRIPT_DIR, "parsed_results.json")
-MANIFEST_FILE     = os.path.join(_SCRIPT_DIR, "trim_manifest.json")
+OUTPUT_DIR       = os.path.join(_PROJECT_DIR, "trimmed_recordings")
+JSON_FILE        = os.path.join(_PROJECT_DIR, "missouri_awos_asos_stations.json")
+TRANSCRIPTS_FILE  = os.path.join(_PROJECT_DIR, "transcripts.json")
+PARSED_FILE       = os.path.join(_PROJECT_DIR, "parsed_results.json")
+MANIFEST_FILE     = os.path.join(_PROJECT_DIR, "trim_manifest.json")
 
 PREROLL_S        = 0.15   # seconds before station name to avoid clipping
 TRAILING_DB      = -42.0  # dBFS threshold for trailing silence removal
