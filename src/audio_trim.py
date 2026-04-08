@@ -37,10 +37,8 @@ import sys
 import numpy as np
 
 _SCRIPT_DIR      = os.path.dirname(os.path.abspath(__file__))
-_PROJECT_DIR     = os.path.dirname(_SCRIPT_DIR)   # WxStream/
-_OUTPUT_DIR      = os.path.join(_PROJECT_DIR, "output")
-_STRIPPED_DIR    = os.path.join(_OUTPUT_DIR, "stripped_recordings")
-_RECORDINGS_DIR  = os.path.join(_OUTPUT_DIR, "recordings")
+_STRIPPED_DIR    = os.path.join(_SCRIPT_DIR, "stripped_recordings")
+_RECORDINGS_DIR  = os.path.join(_SCRIPT_DIR, "recordings")
 # Prefer stripped_recordings/ (silence removed) when it has MP3s,
 # otherwise fall back to recordings/ (raw downloads)
 INPUT_DIR        = (_STRIPPED_DIR
@@ -48,11 +46,11 @@ INPUT_DIR        = (_STRIPPED_DIR
                     and any(f.lower().endswith(".mp3")
                             for f in os.listdir(_STRIPPED_DIR))
                     else _RECORDINGS_DIR)
-OUTPUT_DIR       = os.path.join(_OUTPUT_DIR, "trimmed_recordings")
-JSON_FILE        = os.path.join(_PROJECT_DIR, "missouri_awos_asos_stations.json")
-TRANSCRIPTS_FILE  = os.path.join(_OUTPUT_DIR, "transcripts.json")
-PARSED_FILE       = os.path.join(_OUTPUT_DIR, "parsed_results.json")
-MANIFEST_FILE     = os.path.join(_OUTPUT_DIR, "manifests", "trim_manifest.json")
+OUTPUT_DIR       = os.path.join(_SCRIPT_DIR, "trimmed_recordings")
+JSON_FILE        = os.path.join(_SCRIPT_DIR, "missouri_awos_asos_stations.json")
+TRANSCRIPTS_FILE  = os.path.join(_SCRIPT_DIR, "transcripts.json")
+PARSED_FILE       = os.path.join(_SCRIPT_DIR, "parsed_results.json")
+MANIFEST_FILE     = os.path.join(_SCRIPT_DIR, "trim_manifest.json")
 
 PREROLL_S        = 0.15   # seconds before station name to avoid clipping
 TRAILING_DB      = -42.0  # dBFS threshold for trailing silence removal
@@ -93,7 +91,6 @@ if _RUN_DIR:
     TRANSCRIPTS_FILE = os.path.join(_RUN_DIR, 'transcripts.json')
     PARSED_FILE      = os.path.join(_RUN_DIR, 'parsed_results.json')
 
-os.makedirs(os.path.join(_OUTPUT_DIR, "manifests"), exist_ok=True)
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 
 # ---------------------------------------------------------------------------
@@ -219,7 +216,7 @@ def _anchor_obs_time(words, anchor_idx):
     return ''.join(digits[:4]) if len(digits) >= 4 else None
 
 
-def find_loop_from_timestamps(words, obs_time=None, station_name_words=None):
+def find_loop_from_timestamps(words, obs_time=None, station_first_word=None):
     """
     Identify one complete broadcast loop from word-level timestamps.
 
@@ -239,30 +236,12 @@ def find_loop_from_timestamps(words, obs_time=None, station_name_words=None):
     TRIGGER       = ["automated", "weather", "observation"]
     FILTER_BEFORE = {"for", "the", "is", "an"}
 
-    def _matches_trigger(words, i):
-        """
-        Match "automated weather observation" tolerating one mangled word.
-        Requires 2-of-3 exact matches; the mismatched word must not be an
-        AWOS content word (guards against false positives).
-        """
-        hits = sum(
-            1 for j in range(len(TRIGGER))
-            if words[i + j]["word"].lower().strip(".,") == TRIGGER[j]
-        )
-        if hits == 3:
-            return True
-        if hits == 2:
-            for j in range(len(TRIGGER)):
-                w = words[i + j]["word"].lower().strip(".,")
-                if w != TRIGGER[j] and w not in INVALID_STATION_WORDS:
-                    return True
-        return False
-
     # Find all valid broadcast anchors
     anchors = []
     i = 0
     while i <= len(words) - len(TRIGGER):
-        if _matches_trigger(words, i):
+        if all(words[i + j]["word"].lower().strip(".,") == TRIGGER[j]
+               for j in range(len(TRIGGER))):
             pre = words[i - 1]["word"].lower().strip(".,") if i > 0 else ""
             if pre not in FILTER_BEFORE:
                 anchors.append(i)
@@ -283,23 +262,18 @@ def find_loop_from_timestamps(words, obs_time=None, station_name_words=None):
 
         # Zero-anchor fallback: Whisper missed "automated weather observation"
         # but the station name may repeat at consistent intervals.
-        if station_name_words:
-            # Try each candidate word from the station name in order —
-            # useful when Whisper mangles the first word (e.g. "Lisi" for "Lee")
-            for sfw in station_name_words:
-                sfw = sfw.lower().strip(".,")
-                if not sfw or sfw in INVALID_STATION_WORDS:
-                    continue
-                name_hits = [
-                    k for k, w in enumerate(words)
-                    if w["word"].lower().strip(".,") == sfw
-                ]
-                for j in range(len(name_hits) - 1):
-                    dur = words[name_hits[j + 1]]["start"] - words[name_hits[j]]["start"]
-                    if MIN_LOOP_S < dur < MAX_LOOP_S:
-                        start_sec = max(0.0, words[name_hits[j]]["start"] - PREROLL_S)
-                        end_sec   = words[name_hits[j + 1]]["start"]
-                        return start_sec, end_sec
+        if station_first_word:
+            sfw = station_first_word.lower().strip(".")
+            name_hits = [
+                k for k, w in enumerate(words)
+                if w["word"].lower().strip(".,") == sfw
+            ]
+            for j in range(len(name_hits) - 1):
+                dur = words[name_hits[j + 1]]["start"] - words[name_hits[j]]["start"]
+                if MIN_LOOP_S < dur < MAX_LOOP_S:
+                    start_sec = max(0.0, words[name_hits[j]]["start"] - PREROLL_S)
+                    end_sec   = words[name_hits[j + 1]]["start"]
+                    return start_sec, end_sec
 
         return None
 
@@ -345,8 +319,10 @@ def find_loop_from_timestamps(words, obs_time=None, station_name_words=None):
             # Compressed start just means we trim from the anchor position
             # ('automated weather observation') which is acceptable.
             best = any_match
-        # No pair starts at obs_time — check if any anchor has that time (last-loop case)
-        if best is None:
+        # No pair starts at obs_time — check if any anchor has that time.
+        # Only use this single-anchor path when there are no valid pairs at all;
+        # if pairs exist, fall through to median selection instead.
+        if best is None and not pairs:
             for a_idx, anchor in enumerate(anchors):
                 if _anchor_obs_time(words, anchor) == obs_time:
                     prev = anchors[a_idx - 1] if a_idx > 0 else None
@@ -385,14 +361,47 @@ def find_loop_from_timestamps(words, obs_time=None, station_name_words=None):
                  if best_valid
                  else max(0.0, words[anchors[best_k]]["start"] - PREROLL_S))
 
-    # Trim end: station name of next anchor if valid and not crossing boundary,
-    # else the anchor's own start position
-    ew, ew_valid = _station_name_start(words, anchors[best_k + 1],
-                                       prev_anchor_idx=anchors[best_k])
-    if ew_valid and words[ew]["start"] > words[anchors[best_k]]["start"]:
-        end_sec = words[ew]["start"]
+    # Trim end: if best_k+1 is the last anchor there is no following loop
+    # to define a clean end boundary — run to the end of the recording.
+    # Otherwise use the station name start of the next anchor.
+    if best_k + 1 == len(anchors) - 1 and best_k >= 1:
+        # Last anchor with no following pair: selected loop runs to end
+        # of recording. Only applies when we're past the first loop (best_k>=1)
+        # so pair0 still uses the normal station-name end boundary.
+        end_sec = words[-1]["end"]
     else:
-        end_sec = words[anchors[best_k + 1]]["start"]
+        ew, ew_valid = _station_name_start(words, anchors[best_k + 1],
+                                           prev_anchor_idx=anchors[best_k])
+        if ew_valid and words[ew]["start"] > words[anchors[best_k]]["start"]:
+            end_sec = words[ew]["start"]
+        else:
+            end_sec = words[anchors[best_k + 1]]["start"]
+
+    # FIX 2: if end lands on the last word of the recording AND an earlier
+    # complete loop exists (end is a proper station-name boundary, not the
+    # last word), prefer that loop. This avoids clipping when Twilio's 90s
+    # limit cuts off the selected loop mid-broadcast.
+    last_word_end = words[-1]["end"]
+    if abs(end_sec - last_word_end) < 0.5 and best_k >= 1:
+        for pair in pairs:
+            if pair[0] >= best_k:
+                continue
+            # Compute this earlier pair's end boundary
+            _ew2, _ewv2 = _station_name_start(
+                words, anchors[pair[0] + 1],
+                prev_anchor_idx=anchors[pair[0]])
+            _pair_end = (words[_ew2]["start"] if _ewv2
+                         else words[anchors[pair[0] + 1]]["start"])
+            if abs(_pair_end - last_word_end) > 1.0:
+                # Found a complete earlier loop — use it
+                _sw2 = pair[1]
+                start_sec = (max(0.0, words[_sw2]["start"] - PREROLL_S)
+                             if pair[2]
+                             else max(0.0, words[anchors[pair[0]]]["start"] - PREROLL_S))
+                end_sec   = _pair_end
+                best_k    = pair[0]
+                best_sw   = _sw2
+                break
 
     if end_sec - start_sec < MIN_LOOP_S:
         return None
@@ -499,12 +508,12 @@ def _station_name_start(words, trigger_idx, prev_anchor_idx=None):
 # Trim using word timestamps
 # ---------------------------------------------------------------------------
 
-def trim_by_timestamps(input_path, output_path, words, obs_time=None, station_name_words=None):
+def trim_by_timestamps(input_path, output_path, words, obs_time=None, station_first_word=None):
     """
     Trim using word timestamps. Removes trailing silence from the clip.
     Returns (True, duration) on success, (False, reason) on failure.
     """
-    result = find_loop_from_timestamps(words, obs_time=obs_time, station_name_words=station_name_words)
+    result = find_loop_from_timestamps(words, obs_time=obs_time, station_first_word=station_first_word)
     if result is None:
         return False, "could not identify a complete loop in timestamps"
 
@@ -645,20 +654,11 @@ for filename in files:
     station_meta = stations.get(station_id, {})
     # First word of the station name — used as repeat-anchor fallback
     _loc = station_meta.get("location", "") or station_meta.get("name", "")
-    # Build a list of candidate anchor words from the station name.
-    # Excludes short words and AWOS content words so only meaningful
-    # proper-noun tokens are tried (e.g. ["Fine", "Memorial"] for KAIZ).
-    _SKIP = {"the", "a", "an", "of", "at", "c", "b"}
-    station_name_words = [
-        w for w in _loc.split()
-        if len(w) > 2
-        and w.lower() not in INVALID_STATION_WORDS
-        and w.lower() not in _SKIP
-    ] if _loc else []
+    station_first_word = _loc.split()[0] if _loc else None
     if words:
         ok, detail = trim_by_timestamps(input_path, output_path, words,
                                         obs_time=obs_time,
-                                        station_name_words=station_name_words)
+                                        station_first_word=station_first_word)
         if ok:
             print(f"OK       {filename:<38} {detail:.1f}s  [timestamps]")
             results["ok"].append(station_id)

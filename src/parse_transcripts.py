@@ -287,19 +287,16 @@ def extract_visibility(text):
         val     = float(val_str)
         if val > 9999:  # sky-altitude bled into visibility field
             continue
-        # Standard AWOS max visibility is 10 SM; values > 10 are garbled —
-        # applies whether or not a 'more than' prefix was present.
-        # e.g. 'more than one zero two seven' -> >1027 should be capped to >10 SM
-        if val > 10:
+        # Standard AWOS max visibility is 10 SM; values > 10 without '>' are garbled
+        if val > 10 and not prefix:
             digits = str(m.group(2))
             # Two-digit prefix starts with 10 (e.g. '1027' or '107' -> 10 SM)
             if len(digits) >= 2 and int(digits[:2]) == 10:
-                return f"{prefix}10 SM"
-            if not prefix:
-                # Fall back to first digit for non-prefixed garble (e.g. '71' -> 7 SM)
-                _fd = int(digits[0])
-                if 1 <= _fd <= 9:
-                    return f"{_fd} SM"
+                return "10 SM"
+            # Fall back to first digit (e.g. '71' -> 7 SM)
+            _fd = int(digits[0])
+            if 1 <= _fd <= 9:
+                return f"{_fd} SM"
             continue
         _frac = {0.25: '1/4', 0.5: '1/2', 0.75: '3/4'}
         if val in _frac:
@@ -653,9 +650,28 @@ def extract_local_info(raw_text):
     # Use second-to-last body — local info repeats with each cycle
     body = broadcast_bodies[-2] if len(broadcast_bodies) >= 2 else broadcast_bodies[-1]
 
-    # Split into sentences, avoiding breaks on common abbreviations
+    # Trim body to start at the first local trigger so that weather data
+    # preceding the local info section is not included in the output.
+    # This handles normalized text where periods have no following space.
+    _local_triggers_pre = [
+        r'tower\s+(?:is\s+)?(?:of\s+)?(?:hours|operation)',
+        r'common\s+traffic\s+advis',
+        r'pilot.operated', r'pilot\s+operated',
+        r'avgas', r'self-serve', r'full\s+service\s+100',
+        r'call\s+before\s+landing', r'\d{3}-\d{3}-\d{4}',
+        r'IFR\s+clearance', r'for\s+additional\s+information',
+        r'\d{3,4}\s+local\s+time',
+        r'frequency\s+for\s+(?:automated|weather)',
+    ]
+    _m = re.search('|'.join(_local_triggers_pre), body, re.IGNORECASE)
+    if _m:
+        # Walk back to the nearest sentence boundary (period or start)
+        _start = body.rfind('.', 0, _m.start())
+        body = body[_start + 1:] if _start >= 0 else body
+
+    # Split into sentences, handling both '. ' and '.' as separators
     sentences = re.split(
-        r'(?<![A-Z][a-z])(?<![Ss]t)(?<![Dd]r)(?<!a\.m)(?<!p\.m)\.\s+(?=[A-Z0-9])',
+        r'(?<![A-Z][a-z])(?<![Ss]t)(?<![Dd]r)(?<!a\.m)(?<!p\.m)\.\s*(?=[A-Z0-9])',
         body
     )
 
