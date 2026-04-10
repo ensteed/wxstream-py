@@ -1,425 +1,519 @@
 [
-  {
-    "id": "KAIZ",
-    "location": "Lee C. Fine Memorial Airport",
-    "county": "Miller",
-    "state": "Missouri",
-    "frequency": 135.325,
-    "phone": "(573) 348-0847",
-    "type": "AWOS-3PT"
-  },
-  {
-    "id": "KBBG",
-    "location": "Branson Airport",
-    "county": "Taney",
-    "state": "Missouri",
-    "frequency": 124.625,
-    "phone": "(417) 334-0218",
-    "type": "AWOS-3"
-  },
-  {
-    "id": "KCGI",
-    "location": "Cape Girardeau Regional Airport",
-    "county": "Scott",
-    "state": "Missouri",
-    "frequency": 120.55,
-    "phone": "(573) 335-3811",
-    "type": "ASOS"
-  },
-  {
-    "id": "KCHT",
-    "location": "Chillicothe Municipal Airport",
-    "county": "Livingston",
-    "state": "Missouri",
-    "frequency": 118.175,
-    "phone": "(660) 646-0713",
-    "type": "AWOS-3"
-  },
-  {
-    "id": "KCOU",
-    "location": "Columbia Regional Airport",
-    "county": "Boone",
-    "state": "Missouri",
-    "frequency": 128.45,
-    "phone": "(573) 488-3025",
-    "type": "ASOS"
-  },
-  {
-    "id": "KDMJ",
-    "location": "Sedalia Regional Airport",
-    "county": "Pettis",
-    "state": "Missouri",
-    "frequency": 120.525,
-    "phone": "(660) 826-8225",
-    "type": "ASOS"
-  },
-  {
-    "id": "KEVU",
-    "location": "Maryville Northwest Missouri Regional Airport",
-    "county": "Nodaway",
-    "state": "Missouri",
-    "frequency": 118.225,
-    "phone": "(660) 562-9980",
-    "type": "AWOS-3PT"
-  },
-  {
-    "id": "KEZZ",
-    "location": "Cameron Memorial Airport",
-    "county": "Clinton",
-    "state": "Missouri",
-    "frequency": 121.05,
-    "phone": "(816) 933-2124",
-    "type": "AWOS-3PT"
-  },
-  {
-    "id": "KFAM",
-    "location": "Farmington Regional Airport",
-    "county": "Saint Francois",
-    "state": "Missouri",
-    "frequency": 119.275,
-    "phone": "(573) 756-6042",
-    "type": "AWOS-3PT"
-  },
-  {
-    "id": "KFWB",
-    "location": "Branson West Municipal Airport Emerson Field",
-    "county": "Stone",
-    "state": "Missouri",
-    "frequency": 119.725,
-    "phone": "(417) 272-3922",
-    "type": "AWOS-3"
-  },
-  {
-    "id": "KFYG",
-    "location": "Washington Regional Airport",
-    "county": "Franklin",
-    "state": "Missouri",
-    "frequency": 121.325,
-    "phone": "(636) 433-5914",
-    "type": "AWOS-3PT"
-  },
-  {
-    "id": "KGLY",
-    "location": "Clinton Regional Airport",
-    "county": "Henry",
-    "state": "Missouri",
-    "frequency": 120.475,
-    "phone": "(660) 885-3851",
-    "type": "AWOS-3"
-  },
-  {
-    "id": "KGPH",
-    "location": "Midwest National Air Center",
-    "county": "Clay",
-    "state": "Missouri",
-    "frequency": 120.275,
-    "phone": "(816) 407-3399",
-    "type": "AWOS-3T"
-  },
-  {
-    "id": "KHAE",
-    "location": "Hannibal",
-    "county": "Marion",
-    "state": "Missouri",
-    "frequency": 120.775,
-    "phone": "(573) 221-2584",
-    "type": "AWOS-3"
-  },
-  {
-    "id": "KHFJ",
-    "location": "Monett Regional Airport",
-    "county": "Barry",
-    "state": "Missouri",
-    "frequency": 118.275,
-    "phone": "(417) 476-2613",
-    "type": "AWOS-3"
-  },
-  {
-    "id": "KIRK",
-    "location": "Kirksville Regional Airport",
-    "county": "Adair",
-    "state": "Missouri",
-    "frequency": 121.125,
-    "phone": "(660) 202-8736",
-    "type": "ASOS"
-  },
-  {
-    "id": "KJEF",
-    "location": "Jefferson City Memorial Airport Jefferson City, Missouri",
-    "county": "Callaway",
-    "state": "Missouri",
-    "frequency": 133.625,
-    "phone": "(573) 635-9266",
-    "type": "ASOS"
-  },
-  {
-    "id": "KJLN",
-    "location": "Joplin Regional Airport",
-    "county": "Jasper",
-    "state": "Missouri",
-    "frequency": 120.85,
-    "phone": "(417) 623-8892",
-    "type": "ASOS"
-  },
-  {
-    "id": "KLBO",
-    "location": "Lebanon Floyd W. Jones Airport",
-    "county": "Laclede",
-    "state": "Missouri",
-    "frequency": 118.975,
-    "phone": "(417) 533-3419",
-    "type": "AWOS-3PT"
-  },
-  {
-    "id": "KLRY",
-    "location": "Lawrence Smith Memorial Airport",
-    "county": "Cass",
-    "state": "Missouri",
-    "frequency": 119.975,
-    "phone": "(816) 380-5936",
-    "type": "AWOS-3PT"
-  },
-  {
-    "id": "KLXT",
-    "location": "Lee's Summit Municipal Airport",
-    "county": "Jackson",
-    "state": "Missouri",
-    "frequency": 124.175,
-    "phone": "(816) 347-9807",
-    "type": "ASOS"
-  },
-  {
-    "id": "KMAA",
-    "location": "Malden Regional Airport",
-    "county": "Dunklin",
-    "state": "Missouri",
-    "frequency": 119.825,
-    "phone": "(573) 276-9970",
-    "type": "AWOS-3PT"
-  },
-  {
-    "id": "KMBY",
-    "location": "Moberly - Omar N. Bradley",
-    "county": "Randolph",
-    "state": "Missouri",
-    "frequency": 120.025,
-    "phone": "(660) 269-8028",
-    "type": "AWOS-3PT"
-  },
-  {
-    "id": "KMCI",
-    "location": "Kansas City International Airport",
-    "county": "Platte",
-    "state": "Missouri",
-    "frequency": 128.375,
-    "phone": "(816) 601-1486",
-    "type": "ASOS"
-  },
-  {
-    "id": "KMHL",
-    "location": "Marshall Municipal Airport",
-    "county": "Saline",
-    "state": "Missouri",
-    "frequency": 118.675,
-    "phone": "(660) 886-9130",
-    "type": "AWOS-3"
-  },
-  {
-    "id": "KMKC",
-    "location": "Charles B. Wheeler Downtown Airport",
-    "county": "Clay",
-    "state": "Missouri",
-    "frequency": 120.75,
-    "phone": "(816) 329-2843",
-    "type": "ASOS"
-  },
-  {
-    "id": "KMO8",
-    "location": "North Central Missouri Regional Airport",
-    "county": "Linn",
-    "state": "Missouri",
-    "frequency": 118.425,
-    "phone": "(660) 258-2151",
-    "type": "AWOS-2"
-  },
-  {
-    "id": "KMYJ",
-    "location": "Mexico Memorial Airport",
-    "county": "Audrain",
-    "state": "Missouri",
-    "frequency": 120.575,
-    "phone": "(573) 581-7868",
-    "type": "AWOS-3PT"
-  },
-  {
-    "id": "KNVD",
-    "location": "Nevada Municipal Airport",
-    "county": "Vernon",
-    "state": "Missouri",
-    "frequency": 119.175,
-    "phone": "(417) 448-1635",
-    "type": "AWOS-3"
-  },
-  {
-    "id": "KOZS",
-    "location": "Camdenton - Lake",
-    "county": "Camden",
-    "state": "Missouri",
-    "frequency": 120.225,
-    "phone": "(573) 317-0412",
-    "type": "AWOS-3"
-  },
-  {
-    "id": "KPCD",
-    "location": "Perryville Municipal Airport",
-    "county": "Perry",
-    "state": "Missouri",
-    "frequency": 118.95,
-    "phone": "(573) 543-5390",
-    "type": "AWOS-3PT"
-  },
-  {
-    "id": "KPOF",
-    "location": "Poplar Bluff Regional Business Airport",
-    "county": "Butler",
-    "state": "Missouri",
-    "frequency": 124.225,
-    "phone": "(573) 598-8719",
-    "type": "ASOS"
-  },
-  {
-    "id": "KPYN",
-    "location": "Piedmont Municipal Airport",
-    "county": "Wayne",
-    "state": "Missouri",
-    "frequency": 118.475,
-    "phone": "(573) 223-2796",
-    "type": "AWOS-3"
-  },
-  {
-    "id": "KRAA",
-    "location": "Warsaw Municipal Airport",
-    "county": "Benton",
-    "state": "Missouri",
-    "frequency": 118.325,
-    "phone": "(660) 547-3761",
-    "type": "AWOS-3"
-  },
-  {
-    "id": "KRCU",
-    "location": "Skyhaven Airport",
-    "county": "Johnson",
-    "state": "Missouri",
-    "frequency": 119.575,
-    "phone": "(660) 422-7010",
-    "type": "AWOS-3"
-  },
-  {
-    "id": "KSET",
-    "location": "St. Charles County Smartt Airport",
-    "county": "Saint Charles",
-    "state": "Missouri",
-    "frequency": 118.075,
-    "phone": "(636) 250-4590",
-    "type": "ASOS"
-  },
-  {
-    "id": "KSGF",
-    "location": "Springfield - Springfield-Branson National",
-    "county": "Greene",
-    "state": "Missouri",
-    "frequency": 135.125,
-    "phone": "(314) 227-9909",
-    "type": "ASOS"
-  },
-  {
-    "id": "KSIK",
-    "location": "Sikeston",
-    "county": "Scott",
-    "state": "Missouri",
-    "frequency": 119.175,
-    "phone": "(573) 471-7371",
-    "type": "AWOS-3"
-  },
-  {
-    "id": "KSTJ",
-    "location": "St. Joseph Rosecrans Memorial Airport",
-    "county": "Buchanan",
-    "state": "Missouri",
-    "frequency": 125.05,
-    "phone": "(816) 233-0666",
-    "type": "ASOS"
-  },
-  {
-    "id": "KSTL",
-    "location": "Lambert St. Louis International Airport",
-    "county": "Saint Louis",
-    "state": "Missouri",
-    "frequency": 125.025,
-    "phone": "(314) 238-8419",
-    "type": "ASOS"
-  },
-  {
-    "id": "KSUS",
-    "location": "Spirit of St Louis Airport",
-    "county": "Saint Louis",
-    "state": "Missouri",
-    "frequency": 134.8,
-    "phone": "(314) 890-7255",
-    "type": "ASOS"
-  },
-  {
-    "id": "KTBN",
-    "location": "Waynesville - St Robert - Forney",
-    "county": "Pulaski",
-    "state": "Missouri",
-    "frequency": 118.7,
-    "phone": null,
-    "type": "AWOS-3PT"
-  },
-  {
-    "id": "KTKX",
-    "location": "Kennett Memorial Airport",
-    "county": "Dunklin",
-    "state": "Missouri",
-    "frequency": 119.05,
-    "phone": "(573) 888-9640",
-    "type": "AWOS-3PT"
-  },
-  {
-    "id": "KUNO",
-    "location": "West Plains Regional Airport",
-    "county": "Howell",
-    "state": "Missouri",
-    "frequency": 123.825,
-    "phone": "(417) 257-1313",
-    "type": "ASOS"
-  },
-  {
-    "id": "KUUV",
-    "location": "Sullivan",
-    "county": "Franklin",
-    "state": "Missouri",
-    "frequency": 119.375,
-    "phone": "(573) 860-2596",
-    "type": "AWOS-3"
-  },
-  {
-    "id": "KVER",
-    "location": "Jesse Viertel Memorial Airport",
-    "county": "Cooper",
-    "state": "Missouri",
-    "frequency": 119.625,
-    "phone": "(660) 882-5454",
-    "type": "AWOS-3"
-  },
-  {
-    "id": "KVIH",
-    "location": "Rolla National Airport",
-    "county": "Maries",
-    "state": "Missouri",
-    "frequency": 119.025,
-    "phone": "(573) 299-4419",
-    "type": "ASOS"
-  }
+    {
+        "_id": "KAIZ",
+        "loc_name": "Lee C. Fine Memorial Airport",
+        "county": "Miller",
+        "state": "Missouri",
+        "frequency": 135.325,
+        "phone": "(573) 348-0847",
+        "type": "AWOS-3PT",
+        "silence_threshold_ms": 2000,
+        "rms_silence_threshold_db": -50
+    },
+    {
+        "_id": "KBBG",
+        "loc_name": "Branson Airport",
+        "county": "Taney",
+        "state": "Missouri",
+        "frequency": 124.625,
+        "phone": "(417) 334-0218",
+        "type": "AWOS-3",
+        "silence_threshold_ms": 2000,
+        "rms_silence_threshold_db": -50
+    },
+    {
+        "_id": "KCGI",
+        "loc_name": "Cape Girardeau Regional Airport",
+        "county": "Scott",
+        "state": "Missouri",
+        "frequency": 120.55,
+        "phone": "(573) 335-3811",
+        "type": "ASOS",
+        "silence_threshold_ms": 2000,
+        "rms_silence_threshold_db": -50
+    },
+    {
+        "_id": "KCHT",
+        "loc_name": "Chillicothe Municipal Airport",
+        "county": "Livingston",
+        "state": "Missouri",
+        "frequency": 118.175,
+        "phone": "(660) 646-0713",
+        "type": "AWOS-3",
+        "silence_threshold_ms": 2000,
+        "rms_silence_threshold_db": -50
+    },
+    {
+        "_id": "KCOU",
+        "loc_name": "Columbia Regional Airport",
+        "county": "Boone",
+        "state": "Missouri",
+        "frequency": 128.45,
+        "phone": "(573) 488-3025",
+        "type": "ASOS",
+        "silence_threshold_ms": 2000,
+        "rms_silence_threshold_db": -50
+    },
+    {
+        "_id": "KDMJ",
+        "loc_name": "Sedalia Regional Airport",
+        "county": "Pettis",
+        "state": "Missouri",
+        "frequency": 120.525,
+        "phone": "(660) 826-8225",
+        "type": "ASOS",
+        "silence_threshold_ms": 2000,
+        "rms_silence_threshold_db": -50
+    },
+    {
+        "_id": "KEVU",
+        "loc_name": "Maryville Northwest Missouri Regional Airport",
+        "county": "Nodaway",
+        "state": "Missouri",
+        "frequency": 118.225,
+        "phone": "(660) 562-9980",
+        "type": "AWOS-3PT",
+        "silence_threshold_ms": 2000,
+        "rms_silence_threshold_db": -50
+    },
+    {
+        "_id": "KEZZ",
+        "loc_name": "Cameron Memorial Airport",
+        "county": "Clinton",
+        "state": "Missouri",
+        "frequency": 121.05,
+        "phone": "(816) 933-2124",
+        "type": "AWOS-3PT",
+        "silence_threshold_ms": 2000,
+        "rms_silence_threshold_db": -50
+    },
+    {
+        "_id": "KFAM",
+        "loc_name": "Farmington Regional Airport",
+        "county": "Saint Francois",
+        "state": "Missouri",
+        "frequency": 119.275,
+        "phone": "(573) 756-6042",
+        "type": "AWOS-3PT",
+        "silence_threshold_ms": 2000,
+        "rms_silence_threshold_db": -50
+    },
+    {
+        "_id": "KFWB",
+        "loc_name": "Branson West Municipal Airport Emerson Field",
+        "county": "Stone",
+        "state": "Missouri",
+        "frequency": 119.725,
+        "phone": "(417) 272-3922",
+        "type": "AWOS-3",
+        "silence_threshold_ms": 2000,
+        "rms_silence_threshold_db": -50
+    },
+    {
+        "_id": "KFYG",
+        "loc_name": "Washington Regional Airport",
+        "county": "Franklin",
+        "state": "Missouri",
+        "frequency": 121.325,
+        "phone": "(636) 433-5914",
+        "type": "AWOS-3PT",
+        "silence_threshold_ms": 2000,
+        "rms_silence_threshold_db": -50
+    },
+    {
+        "_id": "KGLY",
+        "loc_name": "Clinton Regional Airport",
+        "county": "Henry",
+        "state": "Missouri",
+        "frequency": 120.475,
+        "phone": "(660) 885-3851",
+        "type": "AWOS-3",
+        "silence_threshold_ms": 2000,
+        "rms_silence_threshold_db": -50
+    },
+    {
+        "_id": "KGPH",
+        "loc_name": "Midwest National Air Center",
+        "county": "Clay",
+        "state": "Missouri",
+        "frequency": 120.275,
+        "phone": "(816) 407-3399",
+        "type": "AWOS-3T",
+        "silence_threshold_ms": 2000,
+        "rms_silence_threshold_db": -50
+    },
+    {
+        "_id": "KHAE",
+        "loc_name": "Hannibal",
+        "county": "Marion",
+        "state": "Missouri",
+        "frequency": 120.775,
+        "phone": "(573) 221-2584",
+        "type": "AWOS-3",
+        "silence_threshold_ms": 2000,
+        "rms_silence_threshold_db": -50
+    },
+    {
+        "_id": "KHFJ",
+        "loc_name": "Monett Regional Airport",
+        "county": "Barry",
+        "state": "Missouri",
+        "frequency": 118.275,
+        "phone": "(417) 476-2613",
+        "type": "AWOS-3",
+        "silence_threshold_ms": 2000,
+        "rms_silence_threshold_db": -50
+    },
+    {
+        "_id": "KIRK",
+        "loc_name": "Kirksville Regional Airport",
+        "county": "Adair",
+        "state": "Missouri",
+        "frequency": 121.125,
+        "phone": "(660) 202-8736",
+        "type": "ASOS",
+        "silence_threshold_ms": 2000,
+        "rms_silence_threshold_db": -50
+    },
+    {
+        "_id": "KJEF",
+        "loc_name": "Jefferson City Memorial Airport Jefferson City, Missouri",
+        "county": "Callaway",
+        "state": "Missouri",
+        "frequency": 133.625,
+        "phone": "(573) 635-9266",
+        "type": "ASOS",
+        "silence_threshold_ms": 2000,
+        "rms_silence_threshold_db": -50
+    },
+    {
+        "_id": "KJLN",
+        "loc_name": "Joplin Regional Airport",
+        "county": "Jasper",
+        "state": "Missouri",
+        "frequency": 120.85,
+        "phone": "(417) 623-8892",
+        "type": "ASOS",
+        "silence_threshold_ms": 2000,
+        "rms_silence_threshold_db": -50
+    },
+    {
+        "_id": "KLBO",
+        "loc_name": "Lebanon Floyd W. Jones Airport",
+        "county": "Laclede",
+        "state": "Missouri",
+        "frequency": 118.975,
+        "phone": "(417) 533-3419",
+        "type": "AWOS-3PT",
+        "silence_threshold_ms": 2000,
+        "rms_silence_threshold_db": -50
+    },
+    {
+        "_id": "KLRY",
+        "loc_name": "Lawrence Smith Memorial Airport",
+        "county": "Cass",
+        "state": "Missouri",
+        "frequency": 119.975,
+        "phone": "(816) 380-5936",
+        "type": "AWOS-3PT",
+        "silence_threshold_ms": 2000,
+        "rms_silence_threshold_db": -50
+    },
+    {
+        "_id": "KLXT",
+        "loc_name": "Lee's Summit Municipal Airport",
+        "county": "Jackson",
+        "state": "Missouri",
+        "frequency": 124.175,
+        "phone": "(816) 347-9807",
+        "type": "ASOS",
+        "silence_threshold_ms": 2000,
+        "rms_silence_threshold_db": -50
+    },
+    {
+        "_id": "KMAA",
+        "loc_name": "Malden Regional Airport",
+        "county": "Dunklin",
+        "state": "Missouri",
+        "frequency": 119.825,
+        "phone": "(573) 276-9970",
+        "type": "AWOS-3PT",
+        "silence_threshold_ms": 2000,
+        "rms_silence_threshold_db": -50
+    },
+    {
+        "_id": "KMBY",
+        "loc_name": "Moberly - Omar N. Bradley",
+        "county": "Randolph",
+        "state": "Missouri",
+        "frequency": 120.025,
+        "phone": "(660) 269-8028",
+        "type": "AWOS-3PT",
+        "silence_threshold_ms": 2000,
+        "rms_silence_threshold_db": -50
+    },
+    {
+        "_id": "KMCI",
+        "loc_name": "Kansas City International Airport",
+        "county": "Platte",
+        "state": "Missouri",
+        "frequency": 128.375,
+        "phone": "(816) 601-1486",
+        "type": "ASOS",
+        "silence_threshold_ms": 2000,
+        "rms_silence_threshold_db": -50
+    },
+    {
+        "_id": "KMHL",
+        "loc_name": "Marshall Municipal Airport",
+        "county": "Saline",
+        "state": "Missouri",
+        "frequency": 118.675,
+        "phone": "(660) 886-9130",
+        "type": "AWOS-3",
+        "silence_threshold_ms": 2000,
+        "rms_silence_threshold_db": -50
+    },
+    {
+        "_id": "KMKC",
+        "loc_name": "Charles B. Wheeler Downtown Airport",
+        "county": "Clay",
+        "state": "Missouri",
+        "frequency": 120.75,
+        "phone": "(816) 329-2843",
+        "type": "ASOS",
+        "silence_threshold_ms": 2000,
+        "rms_silence_threshold_db": -50
+    },
+    {
+        "_id": "KMO8",
+        "loc_name": "North Central Missouri Regional Airport",
+        "county": "Linn",
+        "state": "Missouri",
+        "frequency": 118.425,
+        "phone": "(660) 258-2151",
+        "type": "AWOS-2",
+        "silence_threshold_ms": 2000,
+        "rms_silence_threshold_db": -50
+    },
+    {
+        "_id": "KMYJ",
+        "loc_name": "Mexico Memorial Airport",
+        "county": "Audrain",
+        "state": "Missouri",
+        "frequency": 120.575,
+        "phone": "(573) 581-7868",
+        "type": "AWOS-3PT",
+        "silence_threshold_ms": 2000,
+        "rms_silence_threshold_db": -50
+    },
+    {
+        "_id": "KNVD",
+        "loc_name": "Nevada Municipal Airport",
+        "county": "Vernon",
+        "state": "Missouri",
+        "frequency": 119.175,
+        "phone": "(417) 448-1635",
+        "type": "AWOS-3",
+        "silence_threshold_ms": 2000,
+        "rms_silence_threshold_db": -50
+    },
+    {
+        "_id": "KOZS",
+        "loc_name": "Camdenton - Lake",
+        "county": "Camden",
+        "state": "Missouri",
+        "frequency": 120.225,
+        "phone": "(573) 317-0412",
+        "type": "AWOS-3",
+        "silence_threshold_ms": 2000,
+        "rms_silence_threshold_db": -50
+    },
+    {
+        "_id": "KPCD",
+        "loc_name": "Perryville Municipal Airport",
+        "county": "Perry",
+        "state": "Missouri",
+        "frequency": 118.95,
+        "phone": "(573) 543-5390",
+        "type": "AWOS-3PT",
+        "silence_threshold_ms": 2000,
+        "rms_silence_threshold_db": -50
+    },
+    {
+        "_id": "KPOF",
+        "loc_name": "Poplar Bluff Regional Business Airport",
+        "county": "Butler",
+        "state": "Missouri",
+        "frequency": 124.225,
+        "phone": "(573) 598-8719",
+        "type": "ASOS",
+        "silence_threshold_ms": 2000,
+        "rms_silence_threshold_db": -50
+    },
+    {
+        "_id": "KPYN",
+        "loc_name": "Piedmont Municipal Airport",
+        "county": "Wayne",
+        "state": "Missouri",
+        "frequency": 118.475,
+        "phone": "(573) 223-2796",
+        "type": "AWOS-3",
+        "silence_threshold_ms": 2000,
+        "rms_silence_threshold_db": -50
+    },
+    {
+        "_id": "KRAA",
+        "loc_name": "Warsaw Municipal Airport",
+        "county": "Benton",
+        "state": "Missouri",
+        "frequency": 118.325,
+        "phone": "(660) 547-3761",
+        "type": "AWOS-3",
+        "silence_threshold_ms": 2000,
+        "rms_silence_threshold_db": -50
+    },
+    {
+        "_id": "KRCU",
+        "loc_name": "Skyhaven Airport",
+        "county": "Johnson",
+        "state": "Missouri",
+        "frequency": 119.575,
+        "phone": "(660) 422-7010",
+        "type": "AWOS-3",
+        "silence_threshold_ms": 2000,
+        "rms_silence_threshold_db": -50
+    },
+    {
+        "_id": "KSET",
+        "loc_name": "St. Charles County Smartt Airport",
+        "county": "Saint Charles",
+        "state": "Missouri",
+        "frequency": 118.075,
+        "phone": "(636) 250-4590",
+        "type": "ASOS",
+        "silence_threshold_ms": 2000,
+        "rms_silence_threshold_db": -50
+    },
+    {
+        "_id": "KSGF",
+        "loc_name": "Springfield - Springfield-Branson National",
+        "county": "Greene",
+        "state": "Missouri",
+        "frequency": 135.125,
+        "phone": "(314) 227-9909",
+        "type": "ASOS",
+        "silence_threshold_ms": 2000,
+        "rms_silence_threshold_db": -50
+    },
+    {
+        "_id": "KSIK",
+        "loc_name": "Sikeston",
+        "county": "Scott",
+        "state": "Missouri",
+        "frequency": 119.175,
+        "phone": "(573) 471-7371",
+        "type": "AWOS-3",
+        "silence_threshold_ms": 2000,
+        "rms_silence_threshold_db": -50
+    },
+    {
+        "_id": "KSTJ",
+        "loc_name": "St. Joseph Rosecrans Memorial Airport",
+        "county": "Buchanan",
+        "state": "Missouri",
+        "frequency": 125.05,
+        "phone": "(816) 233-0666",
+        "type": "ASOS",
+        "silence_threshold_ms": 2000,
+        "rms_silence_threshold_db": -50
+    },
+    {
+        "_id": "KSTL",
+        "loc_name": "Lambert St. Louis International Airport",
+        "county": "Saint Louis",
+        "state": "Missouri",
+        "frequency": 125.025,
+        "phone": "(314) 238-8419",
+        "type": "ASOS",
+        "silence_threshold_ms": 2000,
+        "rms_silence_threshold_db": -50
+    },
+    {
+        "_id": "KSUS",
+        "loc_name": "Spirit of St Louis Airport",
+        "county": "Saint Louis",
+        "state": "Missouri",
+        "frequency": 134.8,
+        "phone": "(314) 890-7255",
+        "type": "ASOS",
+        "silence_threshold_ms": 2000,
+        "rms_silence_threshold_db": -50
+    },
+    {
+        "_id": "KTBN",
+        "loc_name": "Waynesville - St Robert - Forney",
+        "county": "Pulaski",
+        "state": "Missouri",
+        "frequency": 118.7,
+        "phone": null,
+        "type": "AWOS-3PT",
+        "silence_threshold_ms": 2000,
+        "rms_silence_threshold_db": -50
+    },
+    {
+        "_id": "KTKX",
+        "loc_name": "Kennett Memorial Airport",
+        "county": "Dunklin",
+        "state": "Missouri",
+        "frequency": 119.05,
+        "phone": "(573) 888-9640",
+        "type": "AWOS-3PT",
+        "silence_threshold_ms": 2000,
+        "rms_silence_threshold_db": -50
+    },
+    {
+        "_id": "KUNO",
+        "loc_name": "West Plains Regional Airport",
+        "county": "Howell",
+        "state": "Missouri",
+        "frequency": 123.825,
+        "phone": "(417) 257-1313",
+        "type": "ASOS",
+        "silence_threshold_ms": 2000,
+        "rms_silence_threshold_db": -50
+    },
+    {
+        "_id": "KUUV",
+        "loc_name": "Sullivan",
+        "county": "Franklin",
+        "state": "Missouri",
+        "frequency": 119.375,
+        "phone": "(573) 860-2596",
+        "type": "AWOS-3",
+        "silence_threshold_ms": 2000,
+        "rms_silence_threshold_db": -50
+    },
+    {
+        "_id": "KVER",
+        "loc_name": "Jesse Viertel Memorial Airport",
+        "county": "Cooper",
+        "state": "Missouri",
+        "frequency": 119.625,
+        "phone": "(660) 882-5454",
+        "type": "AWOS-3",
+        "silence_threshold_ms": 2000,
+        "rms_silence_threshold_db": -50
+    },
+    {
+        "_id": "KVIH",
+        "loc_name": "Rolla National Airport",
+        "county": "Maries",
+        "state": "Missouri",
+        "frequency": 119.025,
+        "phone": "(573) 299-4419",
+        "type": "ASOS",
+        "silence_threshold_ms": 2000,
+        "rms_silence_threshold_db": -50
+    }
 ]
