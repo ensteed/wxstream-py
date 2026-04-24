@@ -122,8 +122,8 @@ def strip_preamble(text):
     (e.g. KMAA last loop had wind+altimeter but no visibility keyword).
     Falls back to altimeter-only if no fully complete loop is found.
     """
-    pattern = r'[Aa]utomated weather observation[.\s,]+(\d{4})[.\s,]*[Zz]ulu(?:[Ww]eather)?'
-    matches = list(re.finditer(pattern, text))
+    pattern = r'[Aa]utomated\s+[Ww]eather\s+[Oo]bservation[.\s,]+(\d{4})[.\s,]*[Zz]ulu(?:\s*[Ww]eather)?'
+    matches = list(re.finditer(pattern, text, re.IGNORECASE))
     if not matches:
         return text, None
     # First pass: prefer loops with both altimeter and visibility
@@ -184,14 +184,22 @@ def extract_wind(text, full_text=None):
             gust_part  = f", gusts {int(g)} kts"
             gust_metar = f"G{g}"
         # Check for variable wind range in full text: 'variable between X and Y'
-        # Exclude 'visibility variable between' - that's a visibility remark not wind
+        # Exclude 'visibility variable between' and 'ceiling variable between' —
+        # those are visibility/ceiling remarks, not wind direction variability.
+        # Wind variable headings are 3-digit compass values (000-360); ceiling values
+        # are altitudes in the hundreds/thousands range — use a value guard too.
         mvr = None
         for _mvr_m in re.finditer(
                 r'variable[\s,]+between[\s,]+(\d+)[\s,]+and[\s,]+(\d+)', ft, re.IGNORECASE):
-            _before = ft[max(0, _mvr_m.start()-25):_mvr_m.start()].lower()
-            if 'visibility' not in _before:
-                mvr = _mvr_m
-                break
+            _before = ft[max(0, _mvr_m.start()-30):_mvr_m.start()].lower()
+            if 'visibility' in _before or 'ceiling' in _before:
+                continue
+            # Wind variable headings must be valid compass bearings (0-360)
+            _lo, _hi = int(_mvr_m.group(1)), int(_mvr_m.group(2))
+            if _lo > 360 or _hi > 360:
+                continue
+            mvr = _mvr_m
+            break
         var_part  = ''
         var_metar = ''
         if mvr:
@@ -381,7 +389,7 @@ def extract_sky(text):
             _add(m.group(1), 'SCT')
 
     # ── Few ────────────────────────────────────────────────────────────────────
-    for m in re.finditer(r'few\s+(?:at\s+)?(\d[\d,]+)', text, re.IGNORECASE):
+    for m in re.finditer(r'few\s+(?:clouds?\s+)?(?:at\s+)?(\d[\d,]+)', text, re.IGNORECASE):
         _add(m.group(1), 'FEW')
 
     # ── Indefinite ceiling / VV ────────────────────────────────────────────────
@@ -642,8 +650,8 @@ def extract_local_info(raw_text):
     the weather observation (tower hours, frequencies, fuel availability, NOTAMs).
     Operates on the raw (un-normalised) transcript.
     """
-    pattern = r'[Aa]utomated weather observation[.\s,]+(\d{4})[.\s,]*[Zz]ulu(?:[Ww]eather)?'
-    segments = re.split(pattern, raw_text)
+    pattern = r'[Aa]utomated\s+[Ww]eather\s+[Oo]bservation[.\s,]+(\d{4})[.\s,]*[Zz]ulu(?:\s*[Ww]eather)?'
+    segments = re.split(pattern, raw_text, flags=re.IGNORECASE)
     broadcast_bodies = segments[2::2]
     if not broadcast_bodies:
         return None
@@ -750,6 +758,34 @@ def _truncate_digit_storm(text, min_run=8):
     return text
 
 
+def _majority_vote_field(norm_full, extract_fn, current_val, invalid_vals=('N/A',)):
+    """
+    Extract a field from every individual loop in the full transcript and return
+    the most common non-invalid value.  Falls back to current_val if no majority
+    can be determined or if every loop agrees with current_val.
+
+    extract_fn: callable(segment_text) -> value_string
+    current_val: value already extracted from the selected (last) loop
+    invalid_vals: values considered absent/invalid and excluded from voting
+    """
+    loop_pattern = r'[Aa]utomated\s+[Ww]eather\s+[Oo]bservation[.\s,]+\d{4}[.\s,]*[Zz]ulu(?:\s*[Ww]eather)?'
+    matches = list(re.finditer(loop_pattern, norm_full, re.IGNORECASE))
+    if len(matches) < 2:
+        return current_val  # only one loop — no vote possible
+    values = []
+    for i, m in enumerate(matches):
+        end = matches[i + 1].start() if i + 1 < len(matches) else len(norm_full)
+        seg = norm_full[m.start():end]
+        val = extract_fn(seg)
+        if val not in invalid_vals:
+            values.append(val)
+    if not values:
+        return current_val
+    counts = Counter(values)
+    majority, _ = counts.most_common(1)[0]
+    return majority
+
+
 def parse_transcript(t):
     raw       = t['raw_transcript']
     raw       = _truncate_digit_storm(raw)
@@ -812,6 +848,32 @@ def parse_transcript(t):
         )
         if _upgrade:
             sky_metar, sky_disp = _full_sky_metar, _full_sky_disp
+    # Majority vote across loops: correct cases where the last broadcast loop
+    # updated to a different sky coverage while most loops reported an earlier
+    # value (e.g. KAIZ: 3 loops BKN800, 1 loop SCT800 — last loop picked SCT).
+    # We vote on the full (metar, disp) pair so altitude is included in the key.
+    if sky_metar not in ('N/A', 'M', 'Missing'):
+        def _extract_sky_pair(seg):
+            sm, sd = extract_sky(seg)
+            return (sm, sd) if sm not in ('N/A', 'M', 'Missing', '') else None
+        _loop_pat = r'[Aa]utomated\s+[Ww]eather\s+[Oo]bservation[.\s,]+\d{4}[.\s,]*[Zz]ulu(?:\s*[Ww]eather)?'
+        _loop_matches = list(re.finditer(_loop_pat, norm_full, re.IGNORECASE))
+        if len(_loop_matches) >= 2:
+            _sky_votes = []
+            for _i, _lm in enumerate(_loop_matches):
+                _end = _loop_matches[_i + 1].start() if _i + 1 < len(_loop_matches) else len(norm_full)
+                _seg = norm_full[_lm.start():_end]
+                _pair = _extract_sky_pair(_seg)
+                if _pair:
+                    _sky_votes.append(_pair)
+            if _sky_votes:
+                _sky_counts = Counter(_sky_votes)
+                _majority_pair, _majority_count = _sky_counts.most_common(1)[0]
+                # Only override when majority is strict (more than half of valid votes)
+                # to avoid flipping on genuinely updating stations or 2-loop splits
+                if (_majority_count > len(_sky_votes) / 2
+                        and _majority_pair != (sky_metar, sky_disp)):
+                    sky_metar, sky_disp = _majority_pair
     temp_disp, temp_metar = extract_temp_dp(norm)
     # Fall back if temp entirely missing or contains implausible values
     def _temp_implausible(disp):
@@ -824,6 +886,29 @@ def parse_transcript(t):
         _full_temp, _full_metar = extract_temp_dp(norm_full)
         if not _temp_implausible(_full_temp):
             temp_disp, temp_metar = _full_temp, _full_metar
+    # Majority vote across loops for temp/dp: corrects cases where the last loop
+    # is a one-off outlier (e.g. KFWB: 2 loops say 17°C, last loop says 18°C).
+    if temp_disp not in ('N/A', 'Missing'):
+        def _extract_temp_pair(seg):
+            td, tm = extract_temp_dp(seg)
+            return (td, tm) if td not in ('N/A', 'Missing') and not _temp_implausible(td) else None
+        _loop_pat_t = r'[Aa]utomated\s+[Ww]eather\s+[Oo]bservation[.\s,]+\d{4}[.\s,]*[Zz]ulu(?:\s*[Ww]eather)?'
+        _loop_matches_t = list(re.finditer(_loop_pat_t, norm_full, re.IGNORECASE))
+        if len(_loop_matches_t) >= 2:
+            _temp_votes = []
+            for _i, _lm in enumerate(_loop_matches_t):
+                _end = _loop_matches_t[_i + 1].start() if _i + 1 < len(_loop_matches_t) else len(norm_full)
+                _seg = norm_full[_lm.start():_end]
+                _pair = _extract_temp_pair(_seg)
+                if _pair:
+                    _temp_votes.append(_pair)
+            if _temp_votes:
+                _temp_counts = Counter(_temp_votes)
+                _majority_temp, _majority_count = _temp_counts.most_common(1)[0]
+                # Only override if the majority is strict (more than half of valid votes)
+                # to avoid flipping on genuinely updating stations
+                if _majority_count > len(_temp_votes) / 2 and _majority_temp != (temp_disp, temp_metar):
+                    temp_disp, temp_metar = _majority_temp
     # If dewpoint missing from last broadcast, search full transcript as fallback
     if temp_disp.endswith('/ N/A'):
         import re as _re
